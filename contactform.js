@@ -95,63 +95,7 @@ jQuery(document).ready(function () {
 		jQuery(inputspan).html(value);
 			});
 
-    jQuery("form").submit(function () {
-
-        var form = $(this).attr('id');
-        var form_id = "#" + form;
-        jQuery(form_id + ' .success').html('');
-		var attach_file = 'true';
-        var msg = jQuery(form_id + " .comment").val();
-        if($(form_id).find('input#attach_file').length > 0)
-        {
-        	var attachedFile = $(form_id).find('input#attach_file')[0];
-        if(attachedFile.hasAttribute("file_extension")){
-        	var allowedExts = attachedFile.getAttribute("file_extension");
-        }
-        else{
-        	var allowedExts = false;
-        }
-        
-        if(attachedFile.hasAttribute("size")){
-	    	var allwdsize = attachedFile.getAttribute("size");
-	    }else{
-        	var allwdsize = false;
-        }
-        
-        var selected = attachedFile.files.length;
-        if( selected > 0)
-        {
-			var attach_file= uploadfile(form_id,allwdsize,allowedExts);
-		}
-		}
-		
-        if (attach_file && validate(form_id)) {
-            var messsage_body = "From \n" + msg_to_sent + " \n Message : " + msg;
-         	jQuery.ajax({
-                type: 'POST',
-                url: 'contactform.php',
-                enctype: 'multipart/form-data',
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: new FormData(this),
-                success: function (msg) {
-                    if (msg == 'sent') {
-                        jQuery(form_id + ' .success').html('<div class="alert alert-success">Message Sent Successfully</div>');
-                        jQuery(form_id + ' .has-error').hide();
-                        jQuery(form_id + " .req_field").html('');
-                        jQuery(form_id).trigger("reset");
-                        msg_to_sent = "";
-                    } else {
-                        jQuery(form_id + ' .success').html('<div class="alert alert-danger">Sorry there was an error sending your message. Please try again later.</div>');
-                        msg_to_sent = "";
-                    }
-                }
-            });
-        }
-        return false;
-
-    });
+    
 
 });
 
@@ -167,13 +111,13 @@ function uploadfile(form_id,allwdsize,allowedExts)
 		var resultArray = allowedExts.split(',').map(function(allowedExts){return String(allowedExts);});
 		}
 
-	   
+
 	   if(allwdsize && filesize > allwdsize)
 	   {
 	   var sizeerr = errflag = true;
-	   errmsg += "Please upload valid file (filesize must be less than " + allwdsize + "Mb";	   
+	   errmsg += "Please upload valid file (filesize must be less than " + allwdsize + "Mb";
 	   }
-	   
+
 	   var res = $.inArray(type,resultArray);
 	   if((resultArray) && (res == -1))
 	   {
@@ -189,8 +133,8 @@ function uploadfile(form_id,allwdsize,allowedExts)
 	   }else{
 	   		errmsg += ")";
 	   		}
-	   
-	   
+
+
 	   if(errflag)
 	   {
 	   	alert(errmsg);

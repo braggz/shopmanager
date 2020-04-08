@@ -15,9 +15,9 @@
 <script type="text/javascript" src="contactform.js">
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="Meta Description" />
+<meta name="description" content="Login Page " />
 <title>
-Home
+Login
 </title>
 <link rel="stylesheet"  href="bootstrap.css" type="text/css" media="screen"/>
 <link rel="stylesheet"  href="style.css" type="text/css" media="screen"/>
@@ -41,7 +41,7 @@ Home
 </script>
 <![endif]-->
 </head>
-<body class="index">
+<body class="login">
 <div class="totopshow">
 <a href="#" class="back-to-top"><img alt="Back to Top" src="images/gototop0.png"/></a>
 </div><!-- totopshow -->
@@ -78,13 +78,13 @@ Menu
 </div>
 <div class="menu-center collapse navbar-collapse">
 <ul class="ttr_menu_items nav navbar-nav nav-center">
-<li class="ttr_menu_items_parent dropdown active"><a href="index.html" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Home</a>
+<li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
 <li class="ttr_menu_items_parent dropdown"><a href="customer-portal.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="login.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Login</a>
+<li class="ttr_menu_items_parent dropdown active"><a href="login.html" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Login</a>
 </li> <!-- main menu list closing -->
 </ul>
 </div>
@@ -96,19 +96,27 @@ Menu
 <div id="ttr_content">
 <div id="ttr_html_content_margin" class="container-fluid">
 <h1 class="ttr_page_title">
-Home
+Login
 </h1>
 <div class="margin_collapsetop"></div>
-<div class="ttr_index_html_row0 row" >
-<div class="post_column col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12 col-12">
-<div class="ttr_index_html_column00">
+<div class="ttr_login_html_row0 row" >
+<div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
+<div class="ttr_login_html_column00">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><p style="line-height:2.3em;">Message Board</p><br style="line-height:2.3em;" /></div>
+<div class="html_content"><p>UNDER CONSTRUCTION</p></div>
+<div class = "login_form" >
+  <form action = "result.php" method="post" style ="float:left">
+    <h1> Please Enter Login Information </h1>
+      <input type = "text" name="username" id = "username" placeholder="Username" style="margin-bottom:10px">
+      <input type = "password" name ="password" id="password" placeholder="Password" style="margin-bottom:10px">
+      <button type='submit' value="submit " style="padding:10px">Login</button>
+  </form>
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>
 </div>
-<div class=" visible-lg-block d-xl-block d-lg-block visible-sm-block d-sm-block visible-xs-block d-block" style="clear: both;width:0px;"></div>
+<div class=" visible-sm-block d-sm-block visible-xs-block d-block" style="clear: both;width:0px;"></div>
 </div>
 <div class="margin_collapsetop"></div>
 </div><!--content_margin-->
@@ -165,6 +173,7 @@ Home
 <a href="http://templatetoaster.com" target="_self" >
 Website
 </a>
+
 </div>
 </div>
 </div>
