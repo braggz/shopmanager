@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +49,7 @@ Customer Portal
 <div class="margin_collapsetop"></div>
 <div class="margin_collapsetop"></div>
 <div id="ttr_page" class="container">
-<div id="ttr_menu"> 
+<div id="ttr_menu">
 <div class="margin_collapsetop"></div>
 <nav class="navbar-default navbar-expand-md navbar">
 <div id="ttr_menu_inner_in">
@@ -78,13 +79,28 @@ Menu
 </div>
 <div class="menu-center collapse navbar-collapse">
 <ul class="ttr_menu_items nav navbar-nav nav-center">
-<li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
+<li class="ttr_menu_items_parent dropdown"><a href="index.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown active"><a href="customer-portal.html" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Customer Portal</a>
+<li class="ttr_menu_items_parent dropdown active"><a href="customer-portal.php" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="login.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Login</a>
+<?php
+
+  if($_SESSION["isLoggedIn"] != 1){
+
+
+   echo "<li class=\"ttr_menu_items_parent dropdown\"><a href=\"login.php\" class=\"ttr_menu_items_parent_link\"><span class=\"menuchildicon\"></span>Login</a>";
+  }
+  else{
+
+  echo  "<li class=\"ttr_menu_items_parent dropdown\"><a href=\"logout.php\" class=\"ttr_menu_items_parent_link\"><span class=\"menuchildicon\"></span>Logout</a>";
+  }
+
+
+
+?>
+
 </li> <!-- main menu list closing -->
 </ul>
 </div>

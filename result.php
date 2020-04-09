@@ -1,5 +1,6 @@
 <html>
   <?php
+  session_start();
     $username = $_POST["username"];
     $password = $_POST["password"];
 
@@ -14,6 +15,8 @@
       $row = $result->fetch_assoc();
       if($password == $row["password"]){
         echo "Login Success";
+        $_SESSION["isLoggedIn"] = 1;
+        echo $_SESSION["isLoggedIn"];
       }
       else {
         echo "<h1>Incorrect Password</h1>";
@@ -30,7 +33,7 @@
 
 
     ?>
-
+<a href="index.php">Click </a>
 
 
 </html>

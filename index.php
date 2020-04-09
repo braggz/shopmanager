@@ -1,3 +1,18 @@
+<?php
+session_start();
+if(!isset($_SESSION["isLoggedIn"])){
+
+  echo "No Session";
+  $_SESSION["isLoggedIn"] = 0;
+}
+  else if(isset($_SESSION["isLoggedIn"])){
+    echo "Yes session";
+  }
+  //This is usefull when setting up a server
+  /*if (!is_writable(session_save_path())) {
+      echo 'Session path "'.session_save_path().'" is not writable for PHP!';
+  }*/
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,13 +93,27 @@ Menu
 </div>
 <div class="menu-center collapse navbar-collapse">
 <ul class="ttr_menu_items nav navbar-nav nav-center">
-<li class="ttr_menu_items_parent dropdown active"><a href="index.html" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Home</a>
+<li class="ttr_menu_items_parent dropdown active"><a href="index.php" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="login.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Login</a>
+<?php
+
+  if($_SESSION["isLoggedIn"] != 1){
+
+
+   echo "<li class=\"ttr_menu_items_parent dropdown\"><a href=\"login.php\" class=\"ttr_menu_items_parent_link\"><span class=\"menuchildicon\"></span>Login</a>";
+  }
+  else{
+
+  echo  "<li class=\"ttr_menu_items_parent dropdown\"><a href=\"logout.php\" class=\"ttr_menu_items_parent_link\"><span class=\"menuchildicon\"></span>Logout</a>";
+  }
+
+
+
+?>
 </li> <!-- main menu list closing -->
 </ul>
 </div>
