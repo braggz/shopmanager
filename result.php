@@ -30,7 +30,7 @@
       //echo "Success";
     //}
     //else echo "Failure";
-
+    mysqli_close($mysqli);
 
     ?>
 <a href="index.php">Click </a>

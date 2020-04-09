@@ -132,7 +132,43 @@ Home
 <div class="post_column col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_index_html_column00">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><p style="line-height:2.3em;">Message Board</p><br style="line-height:2.3em;" /></div>
+<div class="html_content"><p style="line-height:2.3em;"><h1>Cork Board</h1></p><br style="line-height:2.3px" style = "margin-top:20px" />
+  <table class="content-table"   >
+  <?php
+    $dt = new DateTime();
+
+    $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+    if ($mysqli -> connect_errno) {
+      echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+      exit();
+    }
+
+    $result = $mysqli -> query("SELECT message, author,posted_date FROM corkboard ORDER BY id  DESC LIMIT 10 ");
+
+  //  $result2 = $mysqli -> query("SELECT CONVERT FROM corkboard ORDER BY id  DESC LIMIT 10( posted_date,VARCHAR(50))");
+    if ($result->num_rows > 0) {
+      while($row = $result->fetch_assoc()){
+        $date = new DateTime($row["posted_date"]);
+        $fdate = $date->format('d/m/y H:i');
+        echo "<tr>";
+	      echo "<td style = \"border-bottom: 1px solid; padding:6px;\">".$row["message"]."</td>";
+	      echo "<td style = \"border-bottom: 1px solid;padding:6px;\">Posted by: "."".$row["author"]."</td>";
+	      echo "<td style = \"border-bottom: 1px solid;padding:6px;\">Posted On:". $fdate."</td>";
+	      echo "<tr>";
+      }
+
+    }
+    else{
+      echo "<h2> No Messages Found</h2>";
+    }
+    ?>
+
+
+  </table>
+  <form action = "full_cork_board.php" method = "post" style = "padding:10px">
+    <button type = "submit" name = "fullcorkboard" value="View Full Corkboard">View Full Corkboard</button>
+  </form>
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>
