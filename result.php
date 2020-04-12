@@ -13,16 +13,19 @@
     $result = $mysqli -> query("SELECT username, password FROM users where username= '$username' ");
     if ($result->num_rows > 0) {
       $row = $result->fetch_assoc();
-      if($password == $row["password"]){
+      if($username == $row["username"]){
+        if($password == $row["password"]){
 
-        $_SESSION["isLoggedIn"] = 1;
-        header("Location: dashboard.php");
-        exit();
-      }
-      else {
-        $_SESSION["message"]= "Incorrect Password";
-        header("Location: login.php");
-        exit();
+          $_SESSION["isLoggedIn"] = 1;
+          $_SESSION["user"]= $username;
+          header("Location: dashboard.php");
+          exit();
+        }
+        else {
+          $_SESSION["message"]= "Incorrect Password or Username";
+          header("Location: login.php");
+          exit();
+        }
       }
     }
     else {

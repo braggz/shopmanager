@@ -6,7 +6,20 @@ if($_SESSION["isLoggedIn"] != 1){
   $_SESSION["message"] = "You Must Logged in to Access the DashBoard";
   //$_POST["loginInfo"] = "You Must Login to Enter Dashboard";
  exit();
-} ?>
+}
+if(isset($_POST["text"])){
+  $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+  if ($mysqli -> connect_errno) {
+  echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+  exit();
+  }
+  $mes = $_POST["text"];
+  $author =$_SESSION["user"];
+  $mysqli -> query("INSERT INTO corkboard(message,author) VALUES('$mes','$author')");
+  $_SESSION["message"] = "Post Added to Corkboard";
+  unset($_POST["text"]);
+}
+?>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -114,7 +127,17 @@ Dash Board
 <div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_dashboard_html_column00">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><br /><h2>Title</h2><br /><p>Lorem ipsum dolor sit amet, test link adipiscing elit.Nullam dignissim convallis est.Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui.Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.Maecenas ornare tortor.</p></div>
+<div class="html_content"><br /><h2>Post to CorkBoard</h2><br />
+  <form action="dashboard.php" method = "post">
+    <textarea name = "text" >Enter What you would like to post here
+    </textarea>
+    <button type = "submit">Submit</button>
+    <?php
+      echo "<p style=\"color:green\">".$_SESSION["message"]."</p>";
+      unset($_SESSION["message"]);
+     ?>
+  </form>
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>
