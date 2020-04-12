@@ -1,13 +1,12 @@
 <?php
 session_start();
+
 if(!isset($_SESSION["isLoggedIn"])){
 
   echo "No Session";
   $_SESSION["isLoggedIn"] = 0;
 }
-  else if(isset($_SESSION["isLoggedIn"])){
-    echo "Yes session";
-  }
+
   //This is usefull when setting up a server
   /*if (!is_writable(session_save_path())) {
       echo 'Session path "'.session_save_path().'" is not writable for PHP!';
@@ -99,6 +98,9 @@ Menu
 <li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
+<li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
+<hr class ="horiz_separator"/>
+</li> <!-- main menu list closing -->
 <?php
 
   if($_SESSION["isLoggedIn"] != 1){
@@ -126,14 +128,19 @@ Menu
 <div id="ttr_html_content_margin" class="container-fluid">
 <h1 class="ttr_page_title">
 Home
+
 </h1>
+<?php
+  echo "<h1 style=\"color:red\">".$_SESSION["message"]."</h1>";
+  $_SESSION["message"] = "";
+?>
 <div class="margin_collapsetop"></div>
 <div class="ttr_index_html_row0 row" >
 <div class="post_column col-xl-12 col-lg-12 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_index_html_column00">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><p style="line-height:2.3em;"><h1>Cork Board</h1></p><br style="line-height:2.3px" style = "margin-top:20px" />
-  <table class="content-table"   >
+<div class="html_content"><p style="line-height:2.3em;"><h1>Cork Board</h1><br style="line-height:2.3em;" />
+<table class="content-table"   >
   <?php
     $dt = new DateTime();
 
@@ -162,12 +169,15 @@ Home
       echo "<h2> No Messages Found</h2>";
     }
     ?>
-
-
-  </table>
+	</table>
   <form action = "full_cork_board.php" method = "post" style = "padding:10px">
     <button type = "submit" name = "fullcorkboard" value="View Full Corkboard">View Full Corkboard</button>
   </form>
+
+
+
+
+
 </div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
@@ -199,6 +209,7 @@ Home
 <div class="footercellcolumn2">
 <div class="margin_collapsetop"></div>
 <div class="html_content"><h4 style="line-height: normal;"><span style="color:rgba(0,0,0,1);">Pages</span></h4><p style="line-height: normal;">Home</p><p style="line-height: normal;">About</p><p style="line-height: normal;">Contact</p><p style="line-height: normal;">Blog</p></div>
+
 <div class="margin_collapsetop"></div>
 </div>
 </div>
@@ -230,6 +241,9 @@ Home
 <a href="http://templatetoaster.com" target="_self" >
 Website
 </a>
+<span id="ttr_footer_designed_by">
+Designed With TemplateToaster
+</span>
 </div>
 </div>
 </div>

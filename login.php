@@ -1,4 +1,6 @@
-<?php session_start(); ?>
+<?php session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,6 +87,9 @@ Menu
 <li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
+<li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
+<hr class ="horiz_separator"/>
+</li> <!-- main menu list closing -->
 <?php
 
   if($_SESSION["isLoggedIn"] != 1){
@@ -100,9 +105,9 @@ Menu
 
 
 ?>
-
 </li> <!-- main menu list closing -->
 </ul>
+
 </div>
 </div>
 </div>
@@ -127,6 +132,10 @@ Login
       <input type = "password" name ="password" id="password" placeholder="Password" style="margin-bottom:10px">
       <button type='submit' value="submit " style="padding:10px">Login</button>
   </form>
+  <?php
+    echo "<p style =\"color:red\"> ".$_SESSION["message"]."</p>";
+    $_SESSION["message"] = "";
+   ?>
 </div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
@@ -185,7 +194,14 @@ Login
 <div class="ttr_footer_bottom_footer_inner">
 <div class="ttr_footer_element_alignment container">
 </div>
-
+<div id="ttr_footer_designed_by_links">
+<a href="http://templatetoaster.com" target="_self" >
+Website
+</a>
+<span id="ttr_footer_designed_by">
+Designed With TemplateToaster
+</span>
+</div>
 </div>
 </div>
 </div>

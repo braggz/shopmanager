@@ -14,16 +14,21 @@
     if ($result->num_rows > 0) {
       $row = $result->fetch_assoc();
       if($password == $row["password"]){
-        echo "Login Success";
+
         $_SESSION["isLoggedIn"] = 1;
-        echo $_SESSION["isLoggedIn"];
+        header("Location: dashboard.php");
+        exit();
       }
       else {
-        echo "<h1>Incorrect Password</h1>";
+        $_SESSION["message"]= "Incorrect Password";
+        header("Location: login.php");
+        exit();
       }
     }
     else {
-      echo "<h1>No User Found. Please Contact SysAdmin if Problem persists<h1>";
+      $_SESSION["message"]= "No User Found. Please Contact SysAdmin if Problem persists";
+      header("Location: login.php");
+      exit();
     }
 
     //if($match_user = $username){
@@ -33,7 +38,7 @@
     mysqli_close($mysqli);
 
     ?>
-<a href="index.php">Click </a>
+
 
 
 </html>

@@ -85,6 +85,9 @@ Menu
 <li class="ttr_menu_items_parent dropdown active"><a href="customer-portal.php" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
+<li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
+<hr class ="horiz_separator"/>
+</li> <!-- main menu list closing -->
 <?php
 
   if($_SESSION["isLoggedIn"] != 1){
@@ -100,7 +103,6 @@ Menu
 
 
 ?>
-
 </li> <!-- main menu list closing -->
 </ul>
 </div>
