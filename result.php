@@ -10,9 +10,10 @@
   	exit();
   	}
 
-    $result = $mysqli -> query("SELECT username, password FROM users where username= '$username' ");
+    $result = $mysqli -> query("SELECT username, password,auth FROM users where username= '$username' ");
     if ($result->num_rows > 0) {
       $row = $result->fetch_assoc();
+      $_SESSION["auth"]=$row["auth"];
       if($username == $row["username"]){
         if($password == $row["password"]){
 

@@ -146,7 +146,26 @@ Dash Board
 <div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_dashboard_html_column01">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><br /><h2>Title</h2><br /><p>Lorem ipsum dolor sit amet, test link adipiscing elit.Nullam dignissim convallis est.Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui.Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.Maecenas ornare tortor.</p></div>
+<div class="html_content"><br /><h2>View Orders</h2><br />
+  <form action = "vieworders.php" method = "post">
+    <button type="submit" style="width:100%;padding-bottom:10%">View Orders</button>
+  </form>
+  <?php
+
+    if($_SESSION["auth"] == 3){
+    echo  "<form action = \"neworder.php\" method = \"post\">";
+        echo "<button type=\"submit\" style=\"width:100%;padding-bottom:10%;text-align:center\">New Order</button>";
+      echo "</form>";
+    }
+  ?>
+  <p> Total Orders: </p>
+  <p> Orders To Set Up: </p>
+  <p> Orders Being Set Up: </p>
+  <p> Orders Running: </p>
+  <p> Orders In Debur: </p>
+  <p> Orders In Processing: </p>
+  <p> Orders Shipped: </p>
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>
@@ -155,7 +174,20 @@ Dash Board
 <div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_dashboard_html_column02">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><br /><h2>Title</h2><br /><p>Lorem ipsum dolor sit amet, test link adipiscing elit.Nullam dignissim convallis est.Quisque aliquam. Donec faucibus. Nunc iaculis suscipit dui.Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl.Praesent mattis, massa quis luctus fermentum, turpis mi volutpat justo, eu volutpat enim diam eget metus.Maecenas ornare tortor.</p></div>
+<div class="html_content"><br /><h2>Schedule</h2><br />
+  <form action = "schedule.php" method = "post">
+    <button type="submit" style="width:100%;padding-bottom:10%">View Schedule</button>
+  </form>
+  <?php
+
+    if($_SESSION["auth"] == 3){
+    echo  "<form action = \"newemployee.php\" method = \"post\">";
+        echo "<button type=\"submit\" style=\"width:100%;padding-bottom:10%;text-align:center\">Add New Employee</button>";
+      echo "</form>";
+    }
+  ?>
+  <p>Total Assigments: </p>
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>
