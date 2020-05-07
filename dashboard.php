@@ -16,7 +16,13 @@ if(isset($_POST["text"])){
   $mes = $_POST["text"];
   $author =$_SESSION["user"];
   $mysqli -> query("INSERT INTO corkboard(message,author) VALUES('$mes','$author')");
+  if($mysqli->error){
+    $_SESSION["message"]= "Error ".$mysqli->error;
+    $_SESSION["error"]=1;
+  }
+  else{
   $_SESSION["message"] = "Post Added to Corkboard";
+}
   unset($_POST["text"]);
 }
 ?>
@@ -133,7 +139,13 @@ Dash Board
     </textarea>
     <button type = "submit">Submit</button>
     <?php
+      if($_SESSION["error"]){
+      echo "<p style=\"color:red\">".$_SESSION["message"]."</p>";
+    }
+    else{
       echo "<p style=\"color:green\">".$_SESSION["message"]."</p>";
+    }
+      $_SESSION["error"] = 0;
       unset($_SESSION["message"]);
      ?>
   </form>
