@@ -3,19 +3,12 @@
 session_start();
 if($_SESSION["isLoggedIn"] != 1){
   header("Location: index.php");
-  $_SESSION["message"] = "You Must Logged in to Access This";
+  $_SESSION["message"] = "You Must Logged in to Access the DashBoard";
   //$_POST["loginInfo"] = "You Must Login to Enter Dashboard";
  exit();
+
 }
-else if($_SESSION["auth"] < 3){
-  header("Location: index.php");
-  $_SESSION["message"] = "You are not authorized to do this";
-}
-  $multiadd = $_POST["multiaddAM"];
-  if(!isset($multiadd)){
-    $multiadd =1;
-  }
-  echo $multiadd;
+$auth = $_SESSION["auth"];
 ?>
 <html lang="en">
 <head>
@@ -35,7 +28,7 @@ else if($_SESSION["auth"] < 3){
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="description" content="Look at orders" />
 <title>
-New Orders
+View Orders
 </title>
 <link rel="stylesheet"  href="bootstrap.css" type="text/css" media="screen"/>
 <link rel="stylesheet"  href="style.css" type="text/css" media="screen"/>
@@ -95,20 +88,19 @@ Menu
 </button>
 </div>
 <div class="menu-center collapse navbar-collapse">
-
-  <ul class="ttr_menu_items nav navbar-nav nav-center">
-  <li class="ttr_menu_items_parent dropdown active"><a href="index.php" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Home</a>
-  <hr class="horiz_separator">
-  </li> <!-- main menu list closing -->
-  <li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
-  <hr class="horiz_separator">
-  </li> <!-- main menu list closing -->
-  <li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
-  <hr class="horiz_separator">
-  </li> <!-- main menu list closing -->
-  <li class="ttr_menu_items_parent dropdown"><a href="logout.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Logout</a></li> <!-- main menu list closing -->
-  </ul>
-
+<ul class="ttr_menu_items nav navbar-nav nav-center">
+<li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
+<hr class ="horiz_separator"/>
+</li> <!-- main menu list closing -->
+<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+<hr class ="horiz_separator"/>
+</li> <!-- main menu list closing -->
+<li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
+<hr class ="horiz_separator"/>
+</li> <!-- main menu list closing -->
+<li class="ttr_menu_items_parent dropdown"><a href="logout.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Logout</a>
+</li> <!-- main menu list closing -->
+</ul>
 </div>
 </div>
 </div>
@@ -117,39 +109,78 @@ Menu
 <div id="ttr_content_and_sidebar_container">
 <div id="ttr_content">
 <div id="ttr_html_content_margin" class="container-fluid">
-
 <h1 class="ttr_page_title">
-New Orders
+View Orders
 </h1>
-<p>Multi Add; Select a number between 1-100 to add multiple orders</p>
-<form method ="post" action="neworder.php">
-  <input type ="text" name ="multiaddAM" id="multiaddAM" placeholder="1" style="width:5%"> <button type="submit">Multi Add</button>
-</form>
-<h2> Enter Order Information</h2>
-<form method="post" action="orderhandling.php" >
+<?php if($auth>=3){
+  echo "<form action = \"modifyorders.php\" method = \"post\">";
+} ?>
+<table width="100%"; style="border:1px solid";    >
+  <th>ID</th>
+  <th>Amount</th>
+  <th>Part number</th>
+  <th>Rev</th>
+  <th>Due Date</th>
+  <th>Comments</th>
+  <th>Status</th>
+
 <?php
-$i =0;
-for(  $i;$i < $multiadd;$i++){
+//echo $auth;
+  if($auth >= 3){
+    echo "<p>Since you are a manger you can edit orders</p>";
+    echo "<th> Edit</th>";
+  }
+  $dt = new DateTime();
 
-$order = $i+1;
-echo "
-  <p>Order ".$order."</p>
+  $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+  if ($mysqli -> connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+    exit();
+  }
 
-  <input type=\"text\" name=\"amount".$i."\" placeholder=\"Amount\"style=\"width:10%;margin-right:100%;margin-top:1%\">
-  <input type=\"text\" name =\"partnumber".$i."\"placeholder=\"Part Number\"style=\"width:10%;margin-right:100%;margin-top:1%\">
-  <input type=\"text\" name = \"rev".$i."\"placeholder=\"Rev\"style=\"width:10%;margin-right:100%;margin-top:1%\">
-<p>Due date</p>  <input type=\"date\"name=\"date".$i."\" >
-  <input type=\"text\" name = \"comments".$i."\"placeholder=\"Comments\"style=\"width:10%;margin-right:100%;margin-top:1%\">";
+  $result = $mysqli -> query("SELECT id,amount, partnumber,rev,due_date,comments,status FROM orders ORDER BY id  DESC LIMIT 10 ");
 
-}
-$_SESSION["numOrders"] = $i;
-?>
-<button type="submit">Submit</button>
+//  $result2 = $mysqli -> query("SELECT CONVERT FROM corkboard ORDER BY id  DESC LIMIT 10( posted_date,VARCHAR(50))");
+  $status="";
+  if ($result->num_rows > 0) {
 
-</form>
-<div class="margin_collapsetop">
+    $i=0;
+    while($row = $result->fetch_assoc()){
+      //$date = new DateTime($row["posted_date"]);
+      //$fdate = $date->format('d/m/y H:i');
+      echo "<tr>";
+      echo "<td style = \"border: 1px solid; padding:6px;\">".$row["id"]."</td>";
+      echo "<td style = \"border: 1px solid; padding:6px;\">".$row["amount"]."</td>";
+      echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["partnumber"]."</td>";
+      echo "<td style = \"border: 1px solid;padding:6px;\"> "."".$row["rev"]."</td>";
+      echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["due_date"]."</td>";
+      echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["comments"]."</td>";
+      if($row["status"] == 0){
+        $status ="Received";
+      }
+      echo "<td style = \"border: 1px solid;padding:6px;\">"."".$status."</td>";
+      if($auth >=3 ){
+        echo "<td style = \"border: 1px solid;padding:6px;\">
+          <input type = \"checkbox\" name=\"".$i."\" value =\"".$row["id"]."\">
 
-</div>
+        </td>";
+      }
+      $i++;
+      echo "<tr>";
+    }
+    $_SESSION["numOrders"] = $i;
+
+  }
+  else{
+    echo "<h2> No Orders Found</h2>";
+  }
+  ?>
+</table>
+<?php if($auth >= 3){
+  echo "<button type =\"submit\">Edit Orders</button>";
+  echo "</form>";
+} ?>
+<div class="margin_collapsetop"></div>
 <div class="ttr_vieworders_html_row0 row" >
 <div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_vieworders_html_column00">
