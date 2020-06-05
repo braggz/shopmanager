@@ -93,7 +93,7 @@ Menu
 <li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
 <li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>

@@ -121,7 +121,77 @@ Customer Portal
 <div class="post_column col-xl-12 col-lg-12 col-md-3 col-sm-3 col-xs-3 col-3">
 <div class="ttr_customer-portal_html_column00">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><p><span style="color:rgba(255,0,0,1);">UNDER CONSTRUCTION !</span>Please Enter Order Number</p></div>
+<div class="html_content">
+    <form action = "customer-portal.php" method = "post">
+      <input type = "text" name ="trackorder" placeholder="Please enter your order number.">
+      <button type = "submit">Track</button>
+    </form>
+    <table width="100%"; style="border:1px solid";    >
+    <?php
+      if(isset($_POST["trackorder"])){
+        $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+        if ($mysqli -> connect_errno) {
+          echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+          exit();
+        }
+        $id = $_POST["trackorder"];
+        $result = $mysqli -> query("SELECT id,amount, partnumber,rev,due_date,status FROM orders WHERE id = '$id'");
+
+
+          if ($result->num_rows > 0) {
+            echo"<th>ID</th>
+                <th>Amount</th>
+                <th>Part number</th>
+                <th>Rev</th>
+                <th>Due Date</th>
+                <th>Status</th>";
+            while($row = $result->fetch_assoc()){
+              //$date = new DateTime($row["posted_date"]);
+              //$fdate = $date->format('d/m/y H:i');
+              echo "<tr>";
+              echo "<td style = \"border: 1px solid; padding:6px;\">".$row["id"]."</td>";
+              echo "<td style = \"border: 1px solid; padding:6px;\">".$row["amount"]."</td>";
+              echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["partnumber"]."</td>";
+              echo "<td style = \"border: 1px solid;padding:6px;\"> "."".$row["rev"]."</td>";
+              echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["due_date"]."</td>";
+
+
+              switch ($row["status"]) {
+                case 0:
+                  $status = "Received";
+                  break;
+                case 1:
+                  $status = "Set Up";
+                  break;
+                case 2:
+                  $status = "Manufacturing";
+                  break;
+                case 3:
+                  $status = "Debur";
+                  break;
+                case 4:
+                  $status = "Packageing and Processing";
+                  break;
+                case 5:
+                  $status = "Shipped";
+                  break;
+
+                default:
+                  $status = "Error: Status Not Set ";
+                  break;
+              }
+             echo "<td style = \"border: 1px solid;padding:6px;\">"."".$status."</td>";
+              echo "</tr>";
+      }
+        echo "</table>";
+    }
+    else{
+      echo "<h1>No order found, please call us if this peoblem persists!</h1>";
+    }
+  }
+     ?>
+
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>

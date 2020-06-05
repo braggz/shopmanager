@@ -94,7 +94,7 @@ Menu
 <li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
 <li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
@@ -121,13 +121,21 @@ if ($mysqli -> connect_errno) {
 }
 echo "<form action = \"editorders.php\" method = \"post\">";
 for($i=0;$i<$_SESSION["numOrders"];$i++){
+
   if(isset($_POST[$i])){
   $id = $_POST[$i];
   //echo $id;
   $_SESSION["id".$acount] = $id;
   echo "<div style = \"border-style:solid;\" >  ";
   echo "Order Number: ".$id;
-  $result = $mysqli -> query("SELECT amount, partnumber,rev,due_date,comments,status FROM orders WHERE id ='$id'");
+  if(isset($_POST["deleteOrders"])){
+    $result = $mysqli -> query("DELETE FROM orders WHERE id ='$id'");
+    header("Location: dashboard.php");
+    $_SESSION["message"] = "Orders Successfully Deleted";
+  }
+  else{
+      $result = $mysqli -> query("SELECT amount, partnumber,rev,due_date,comments,status FROM orders WHERE id ='$id'");
+  }
 
   if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()){
@@ -203,6 +211,8 @@ $acount++;
 }
 $_SESSION["numOrders"] = $acount;
 echo "<button type = \"submit\"> Submit Changes </button>";
+
+
 echo "</form>"?>
 <div class="margin_collapsetop"></div>
 <div class="ttr_vieworders_html_row0 row" >

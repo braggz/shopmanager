@@ -92,7 +92,7 @@ Menu
 <li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
 <li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
@@ -116,20 +116,12 @@ View Orders
   echo "<form action = \"modifyorders.php\" method = \"post\">";
 } ?>
 <table width="100%"; style="border:1px solid";    >
-  <th>ID</th>
-  <th>Amount</th>
-  <th>Part number</th>
-  <th>Rev</th>
-  <th>Due Date</th>
-  <th>Comments</th>
-  <th>Status</th>
+
 
 <?php
+
 //echo $auth;
-  if($auth >= 3){
-    echo "<p>Since you are a manger you can edit orders</p>";
-    echo "<th> Edit</th>";
-  }
+
   $dt = new DateTime();
 
   $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
@@ -143,6 +135,17 @@ View Orders
 //  $result2 = $mysqli -> query("SELECT CONVERT FROM corkboard ORDER BY id  DESC LIMIT 10( posted_date,VARCHAR(50))");
   $status="";
   if ($result->num_rows > 0) {
+echo"<th>ID</th>
+    <th>Amount</th>
+    <th>Part number</th>
+    <th>Rev</th>
+    <th>Due Date</th>
+    <th>Comments</th>
+    <th>Status</th>";
+    if($auth >= 3){
+      echo "<p>Since you are a manger you can edit orders</p>";
+      echo "<th> Edit</th>";
+    }
 
     $i=0;
     while($row = $result->fetch_assoc()){
@@ -155,9 +158,7 @@ View Orders
       echo "<td style = \"border: 1px solid;padding:6px;\"> "."".$row["rev"]."</td>";
       echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["due_date"]."</td>";
       echo "<td style = \"border: 1px solid;padding:6px;\">"."".$row["comments"]."</td>";
-      if($row["status"] == 0){
-        $status ="Received";
-      }
+
       switch ($row["status"]) {
         case 0:
           $status = "Received";
@@ -193,17 +194,20 @@ View Orders
       echo "<tr>";
     }
     $_SESSION["numOrders"] = $i;
-
+    echo "</table>";
+    if($auth >= 3){
+      echo "<button type =\"submit\">Edit Orders</button>";
+      echo "<button type = \"submit\" value = \"1\" name = \"deleteOrders\"> Delete Orders </button>";
+      echo "</form>";
+    }
   }
   else{
     echo "<h2> No Orders Found</h2>";
   }
+
   ?>
-</table>
-<?php if($auth >= 3){
-  echo "<button type =\"submit\">Edit Orders</button>";
-  echo "</form>";
-} ?>
+
+
 <div class="margin_collapsetop"></div>
 <div class="ttr_vieworders_html_row0 row" >
 <div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
