@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <?php
-$acount =0;
 session_start();
+$acount =0;
+
 if($_SESSION["isLoggedIn"] != 1){
   header("Location: index.php");
   $_SESSION["message"] = "You Must Logged in to Access the DashBoard";
@@ -121,9 +122,9 @@ if ($mysqli -> connect_errno) {
 echo "<form action = \"editorders.php\" method = \"post\">";
 for($i=0;$i<$_SESSION["numOrders"];$i++){
   if(isset($_POST[$i])){
-    $acount++;
   $id = $_POST[$i];
   //echo $id;
+  $_SESSION["id".$acount] = $id;
   echo "<div style = \"border-style:solid;\" >  ";
   echo "Order Number: ".$id;
   $result = $mysqli -> query("SELECT amount, partnumber,rev,due_date,comments,status FROM orders WHERE id ='$id'");
@@ -131,25 +132,76 @@ for($i=0;$i<$_SESSION["numOrders"];$i++){
   if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()){
 
-      echo "<p>Amount:</p><input style = \" margin-bottom:5px\" type = \"text\" name = \"amount".$acount." \" value=\" ".$row["amount"]." \"> ";
-      echo "<p>Part Number: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"partnumber".$acount." \" value=\" ".$row["partnumber"]." \"> ";
-      echo "<p>Rev: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"rev".$acount."\" value=\" ".$row["rev"]." \"> ";
-      $date = $row["due_date"];
-      $date = strval($date);
+      echo "<p>Amount:</p><input style = \" margin-bottom:5px\" type = \"text\" name = \"amount".$acount."\" value=\"".$row["amount"]." \"> ";
+      echo "<p>Part Number: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"partnumber".$acount."\" value=\"".$row["partnumber"]." \"> ";
+      echo "<p>Rev: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"rev".$acount."\" value=\"".$row["rev"]." \"> ";
+      //$date = $row["due_date"];
+    //  $date = strval($date);
       //echo $date;
-      echo "<p> Date Due: </p><input style = \" margin-bottom:5px\" type =\"date\" value =\"".$date."\">";
+      echo "<p> Date Due: </p><input style = \" margin-bottom:5px\" type =\"date\" name = \"due_date".$acount."\" value =\"".$row["due_date"]."\">";
   //    echo "<input type = \"date\" name = \"due_date".$acount." \" value=\" 2000-10-10 \"> ";
-      echo "<p>Comments: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"comments".$acount." \" value=\" ".$row["comments"]." \"> ";
-      echo "<p> Status</p><input style = \" margin-bottom:5px\" type = \"text\" name = \"status".$acount." \" value=\" ".$row["status"]." \"> ";
+      echo "<p>Comments: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"comments".$acount."\" value=\"".$row["comments"]." \"> ";
+      echo "<p> Status</p><input type = \"radio\" id = \"0".$id."\" name = \"status".$acount."\" value=\"0\" ";
+      if($row["status"] == 0){
+        echo "checked >";
+      }
+      else{
+      echo ">";
+      }
+      echo "<label for =\"0".$id."\">Received</label>";
+      echo "<input type = \"radio\" id = \"1".$id."\" name = \"status".$acount."\" value=\"1\" ";
+      if($row["status"] == 1){
+        echo "checked >";
+      }
+      else{
+      echo ">";
+      }
+      echo "<label for =\"1".$id."\">Set up</label>";
+      echo "<input type = \"radio\" id = \"2".$id."\" name = \"status".$acount."\" value=\"2\" ";
+      if($row["status"] == 2){
+        echo "checked >";
+      }
+      else{
+      echo ">";
+      }
+      echo "<label for =\"2".$id."\">Manufacturing</label>";
+      echo "<input type = \"radio\" id = \"3".$id."\" name = \"status".$acount."\" value=\"3\"";
+      if($row["status"] == 3){
+        echo "checked >";
+      }
+      else{
+      echo ">";
+      }
+      echo "<label for =\"3".$id."\">Debur</label>";
+      echo "<input type = \"radio\" id = \"4".$id."\" name = \"status".$acount."\" value=\"4\"";
+      if($row["status"] == 4){
+        echo "checked >";
+      }
+      else{
+      echo ">";
+      }
+      echo "<label for =\"4".$id."\">Packeaing</label>";
+      echo "<input type = \"radio\" id = \"5".$id."\" name = \"status".$acount."\" value=\"5\"";
+      if($row["status"] == 5){
+        echo "checked >";
+      }
+      else{
+      echo ">";
+      }
+      echo "<label for =\"5".$id."\">Shipped</label>";
       echo "<br>";
     }
+
   }
+  //
 echo "</div>";
+$acount++;
 }
 
 //echo $i;
 
 }
+$_SESSION["numOrders"] = $acount;
 echo "<button type = \"submit\"> Submit Changes </button>";
 echo "</form>"?>
 <div class="margin_collapsetop"></div>

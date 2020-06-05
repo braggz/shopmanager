@@ -158,6 +158,30 @@ View Orders
       if($row["status"] == 0){
         $status ="Received";
       }
+      switch ($row["status"]) {
+        case 0:
+          $status = "Received";
+          break;
+        case 1:
+          $status = "Set Up";
+          break;
+        case 2:
+          $status = "Manufacturing";
+          break;
+        case 3:
+          $status = "Debur";
+          break;
+        case 4:
+          $status = "Packageing and Processing";
+          break;
+        case 5:
+          $status = "Shipped";
+          break;
+
+        default:
+          $status = "Error: Status Not Set ";
+          break;
+      }
       echo "<td style = \"border: 1px solid;padding:6px;\">"."".$status."</td>";
       if($auth >=3 ){
         echo "<td style = \"border: 1px solid;padding:6px;\">

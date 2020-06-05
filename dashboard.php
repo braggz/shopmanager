@@ -169,14 +169,35 @@ Dash Board
         echo "<button type=\"submit\" style=\"width:100%;padding-bottom:10%;text-align:center\">New Order</button>";
       echo "</form>";
     }
+
+    $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+    if ($mysqli -> connect_errno) {
+      echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+      exit();
+    }
+
+    $result = $mysqli -> query("SELECT id FROM orders ");
+    $row = mysqli_num_rows($result);
+    echo "<p> Total Orders: ".$row."</p>";
+    $result = $mysqli -> query("SELECT id FROM orders WHERE status = 0");
+    $row = mysqli_num_rows($result);
+    echo "<p> Orders Recieved: ".$row."</p>";
+    $result = $mysqli -> query("SELECT id FROM orders WHERE status = 1");
+    $row = mysqli_num_rows($result);
+    echo "<p> Orders Being Set Up: ".$row."</p>";
+    $result = $mysqli -> query("SELECT id FROM orders WHERE status = 2");
+    $row = mysqli_num_rows($result);
+    echo "<p> Orders Running: ".$row."</p>";
+    $result = $mysqli -> query("SELECT id FROM orders WHERE status = 3");
+    $row = mysqli_num_rows($result);
+    echo "<p> Orders In Debur: ".$row."</p>";
+    $result = $mysqli -> query("SELECT id FROM orders WHERE status = 4");
+    $row = mysqli_num_rows($result);
+    echo "<p> Orders In Processing: ".$row."</p>";
+    $result = $mysqli -> query("SELECT id FROM orders WHERE status = 5");
+    $row = mysqli_num_rows($result);
+    echo "<p> Orders Shipped: ".$row."</p>";
   ?>
-  <p> Total Orders: </p>
-  <p> Orders To Set Up: </p>
-  <p> Orders Being Set Up: </p>
-  <p> Orders Running: </p>
-  <p> Orders In Debur: </p>
-  <p> Orders In Processing: </p>
-  <p> Orders Shipped: </p>
 </div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
