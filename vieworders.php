@@ -89,7 +89,7 @@ Menu
 </div>
 <div class="menu-center collapse navbar-collapse">
 <ul class="ttr_menu_items nav navbar-nav nav-center">
-<li class="ttr_menu_items_parent dropdown"><a href="index.html" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
+<li class="ttr_menu_items_parent dropdown"><a href="index.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
 <li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
@@ -130,7 +130,7 @@ View Orders
     exit();
   }
 
-  $result = $mysqli -> query("SELECT id,amount, partnumber,rev,due_date,comments,status FROM orders ORDER BY id  DESC LIMIT 10 ");
+  $result = $mysqli -> query("SELECT id,amount, partnumber,rev,due_date,comments,status FROM orders ORDER BY id  DESC ");
 
 //  $result2 = $mysqli -> query("SELECT CONVERT FROM corkboard ORDER BY id  DESC LIMIT 10( posted_date,VARCHAR(50))");
   $status="";

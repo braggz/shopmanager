@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <?php
 session_start();
-$acount =0;
-
 if($_SESSION["isLoggedIn"] != 1){
   header("Location: index.php");
-  $_SESSION["message"] = "You Must Logged in to Access the DashBoard";
+  $_SESSION["message"] = "You Must Logged in to Access This";
   //$_POST["loginInfo"] = "You Must Login to Enter Dashboard";
  exit();
-
 }
-$auth = $_SESSION["auth"];
+else if($_SESSION["auth"] < 3){
+  header("Location: index.php");
+  $_SESSION["message"] = "You are not authorized to do this";
+}
+  $multiadd = $_POST["multiaddAM"];
+  if(!isset($multiadd)){
+    $multiadd =1;
+  }
+  echo $multiadd;
 ?>
 <html lang="en">
 <head>
@@ -30,7 +35,7 @@ $auth = $_SESSION["auth"];
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="description" content="Look at orders" />
 <title>
-Edit Orders
+New Mill Task
 </title>
 <link rel="stylesheet"  href="bootstrap.css" type="text/css" media="screen"/>
 <link rel="stylesheet"  href="style.css" type="text/css" media="screen"/>
@@ -90,19 +95,20 @@ Menu
 </button>
 </div>
 <div class="menu-center collapse navbar-collapse">
-<ul class="ttr_menu_items nav navbar-nav nav-center">
-<li class="ttr_menu_items_parent dropdown"><a href="index.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
-<hr class ="horiz_separator"/>
-</li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
-<hr class ="horiz_separator"/>
-</li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
-<hr class ="horiz_separator"/>
-</li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="logout.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Logout</a>
-</li> <!-- main menu list closing -->
-</ul>
+
+  <ul class="ttr_menu_items nav navbar-nav nav-center">
+  <li class="ttr_menu_items_parent dropdown active"><a href="index.php" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Home</a>
+  <hr class="horiz_separator">
+  </li> <!-- main menu list closing -->
+  <li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+  <hr class="horiz_separator">
+  </li> <!-- main menu list closing -->
+  <li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
+  <hr class="horiz_separator">
+  </li> <!-- main menu list closing -->
+  <li class="ttr_menu_items_parent dropdown"><a href="logout.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Logout</a></li> <!-- main menu list closing -->
+  </ul>
+
 </div>
 </div>
 </div>
@@ -111,110 +117,55 @@ Menu
 <div id="ttr_content_and_sidebar_container">
 <div id="ttr_content">
 <div id="ttr_html_content_margin" class="container-fluid">
+
 <h1 class="ttr_page_title">
-Edit Orders
-</h1><?php
-$mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
-if ($mysqli -> connect_errno) {
-  echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
-  exit();
-}
-echo "<form action = \"editorders.php\" method = \"post\">";
-for($i=0;$i<$_SESSION["numOrders"];$i++){
+New Mill Task
+</h1>
+<p>Multi Add; Select a number between 1-100 to add multiple orders</p>
+<form method ="post" action="newmill.php">
+  <input type ="text" name ="multiaddAM" id="multiaddAM" placeholder="1" style="width:5%"> <button type="submit">Multi Add</button>
+</form>
+<h2> Enter Order Information</h2>
+<form method="post" action="millhandling.php" >
+<?php
+$i =0;
+for(  $i;$i < $multiadd;$i++){
 
-  if(isset($_POST[$i])){
-  $id = $_POST[$i];
-  //echo $id;
-  $_SESSION["id".$acount] = $id;
-  echo "<div style = \"border-style:solid;\" >  ";
-  echo "Order Number: ".$id;
-  if(isset($_POST["deleteOrders"])){
-    $result = $mysqli -> query("DELETE FROM orders WHERE id ='$id'");
-    header("Location: dashboard.php");
-    $_SESSION["message"] = "Orders Successfully Deleted";
+$order = $i+1;
+echo "
+  <p>Order ".$order."</p>
+
+  <input type=\"text\" name=\"millnum".$i."\" placeholder=\"Mill Number\"style=\"width:10%;margin-right:100%;margin-top:1%\">";
+  $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+  if ($mysqli -> connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+    exit();
   }
-  else{
-      $result = $mysqli -> query("SELECT amount, partnumber,rev,due_date,comments,status FROM orders WHERE id ='$id'");
-  }
+  echo "<p> Select Employee</p>";
+  echo "<select name = \"employee".$i."\">";
+  $result = $mysqli -> query("SELECT username FROM users  ");
+    if ($result->num_rows > 0) {
+      while($row = $result->fetch_assoc()){
+        $emp = $row["username"];
 
-  if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()){
-
-      echo "<p>Amount:</p><input style = \" margin-bottom:5px\" type = \"text\" name = \"amount".$acount."\" value=\"".$row["amount"]." \"> ";
-      echo "<p>Part Number: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"partnumber".$acount."\" value=\"".$row["partnumber"]." \"> ";
-      echo "<p>Rev: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"rev".$acount."\" value=\"".$row["rev"]." \"> ";
-      //$date = $row["due_date"];
-    //  $date = strval($date);
-      //echo $date;
-      echo "<p> Date Due: </p><input style = \" margin-bottom:5px\" type =\"date\" name = \"due_date".$acount."\" value =\"".$row["due_date"]."\">";
-  //    echo "<input type = \"date\" name = \"due_date".$acount." \" value=\" 2000-10-10 \"> ";
-      echo "<p>Comments: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"comments".$acount."\" value=\"".$row["comments"]." \"> ";
-      echo "<p> Status</p><input type = \"radio\" id = \"0".$id."\" name = \"status".$acount."\" value=\"0\" ";
-      if($row["status"] == 0){
-        echo "checked >";
+        echo "<option value =\"".$emp."\"style=\"width:10%;margin-right:100%;margin-top:1%\">".$emp."</option> ";
       }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"0".$id."\">Received</label>";
-      echo "<input type = \"radio\" id = \"1".$id."\" name = \"status".$acount."\" value=\"1\" ";
-      if($row["status"] == 1){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"1".$id."\">Set up</label>";
-      echo "<input type = \"radio\" id = \"2".$id."\" name = \"status".$acount."\" value=\"2\" ";
-      if($row["status"] == 2){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"2".$id."\">Manufacturing</label>";
-      echo "<input type = \"radio\" id = \"3".$id."\" name = \"status".$acount."\" value=\"3\"";
-      if($row["status"] == 3){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"3".$id."\">Debur</label>";
-      echo "<input type = \"radio\" id = \"4".$id."\" name = \"status".$acount."\" value=\"4\"";
-      if($row["status"] == 4){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"4".$id."\">Packeaing</label>";
-      echo "<input type = \"radio\" id = \"5".$id."\" name = \"status".$acount."\" value=\"5\"";
-      if($row["status"] == 5){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"5".$id."\">Shipped</label>";
-      echo "<br>";
     }
-
-  }
-  //
-echo "</div>";
-$acount++;
-}
-
-//echo $i;
+    echo "</select>";
+echo "  <input type=\"text\" name =\"partnumber".$i."\"placeholder=\"Part Number\"style=\"width:10%;margin-right:100%;margin-top:1%\">
+<p>Due date</p>  <input type=\"date\"name=\"task_date".$i."\" >
+  <input type=\"text\" name = \"comments".$i."\"placeholder=\"Comments\"style=\"width:10%;margin-right:100%;margin-top:1%\">
+  <input type=\"text\" name = \"task".$i."\"placeholder=\"Task\"style=\"width:10%;margin-right:100%;margin-top:1%\">";
 
 }
-$_SESSION["numOrders"] = $acount;
-echo "<button type = \"submit\"> Submit Changes </button>";
+$_SESSION["numOrders"] = $i;
+?>
+<button type="submit">Submit</button>
 
+</form>
+<div class="margin_collapsetop">
 
-echo "</form>"?>
-<div class="margin_collapsetop"></div>
+</div>
 <div class="ttr_vieworders_html_row0 row" >
 <div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
 <div class="ttr_vieworders_html_column00">

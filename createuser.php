@@ -1,17 +1,46 @@
 <!DOCTYPE html>
 <?php
 session_start();
-$acount =0;
-
+//$message = "";
 if($_SESSION["isLoggedIn"] != 1){
   header("Location: index.php");
-  $_SESSION["message"] = "You Must Logged in to Access the DashBoard";
+  $_SESSION["message"] = "You Must Logged in to Access This";
   //$_POST["loginInfo"] = "You Must Login to Enter Dashboard";
  exit();
-
 }
-$auth = $_SESSION["auth"];
-?>
+else if($_SESSION["auth"] < 3){
+  header("Location: index.php");
+  $_SESSION["message"] = "You are not authorized to do this";
+}
+else if(isset($_POST["username"])){
+  echo "adsdsa";
+  if(!isset($_POST["password"]) || !isset($_POST["passwordcheck"])){
+    $message = "Need a Password!";
+  }
+  $mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
+  if ($mysqli -> connect_errno) {
+  echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+  exit();
+  }
+  $username = $_POST["username"];
+  $password = $_POST["password"];
+  $auth = $_POST["auth"];
+  $result = $mysqli -> query("SELECT username FROM users where username= '$username' ");
+  if($_POST["password"] != $_POST["passwordcheck"]){
+    $message = "Passwords do not match";
+  }
+  else if($result->num_rows > 0){
+    $message = "Username already exists";
+
+  }
+  else{
+    $result = $mysqli -> query("INSERT INTO users (username, password, auth) VALUES ('$username','$password','$auth') ");
+    header("Location: dashboard.php");
+    $_SESSION["message"] = "New Employee Added!";
+  }
+}
+ ?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -28,9 +57,9 @@ $auth = $_SESSION["auth"];
 <script type="text/javascript" src="contactform.js">
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta name="description" content="Look at orders" />
+<meta name="description" content="Meta Description" />
 <title>
-Edit Orders
+Create A New User
 </title>
 <link rel="stylesheet"  href="bootstrap.css" type="text/css" media="screen"/>
 <link rel="stylesheet"  href="style.css" type="text/css" media="screen"/>
@@ -54,7 +83,7 @@ Edit Orders
 </script>
 <![endif]-->
 </head>
-<body class="vieworders">
+<body class="createuser">
 <div class="totopshow">
 <a href="#" class="back-to-top"><img alt="Back to Top" src="images/gototop0.png"/></a>
 </div><!-- totopshow -->
@@ -94,13 +123,27 @@ Menu
 <li class="ttr_menu_items_parent dropdown"><a href="index.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Home</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="customer-portal.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Customer Portal</a>
+<li class="ttr_menu_items_parent dropdown active"><a href="customer-portal.php" class="ttr_menu_items_parent_link_active"><span class="menuchildicon"></span>Customer Portal</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
 <li class="ttr_menu_items_parent dropdown"><a href="dashboard.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Dash Board</a>
 <hr class ="horiz_separator"/>
 </li> <!-- main menu list closing -->
-<li class="ttr_menu_items_parent dropdown"><a href="logout.php" class="ttr_menu_items_parent_link"><span class="menuchildicon"></span>Logout</a>
+<?php
+
+  if($_SESSION["isLoggedIn"] != 1){
+
+
+   echo "<li class=\"ttr_menu_items_parent dropdown\"><a href=\"login.php\" class=\"ttr_menu_items_parent_link\"><span class=\"menuchildicon\"></span>Login</a>";
+  }
+  else{
+
+  echo  "<li class=\"ttr_menu_items_parent dropdown\"><a href=\"logout.php\" class=\"ttr_menu_items_parent_link\"><span class=\"menuchildicon\"></span>Logout</a>";
+  }
+
+
+
+?>
 </li> <!-- main menu list closing -->
 </ul>
 </div>
@@ -112,119 +155,36 @@ Menu
 <div id="ttr_content">
 <div id="ttr_html_content_margin" class="container-fluid">
 <h1 class="ttr_page_title">
-Edit Orders
-</h1><?php
-$mysqli = new mysqli("localhost","login","sH0pM@nAger","shopmanager");
-if ($mysqli -> connect_errno) {
-  echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
-  exit();
-}
-echo "<form action = \"editorders.php\" method = \"post\">";
-for($i=0;$i<$_SESSION["numOrders"];$i++){
-
-  if(isset($_POST[$i])){
-  $id = $_POST[$i];
-  //echo $id;
-  $_SESSION["id".$acount] = $id;
-  echo "<div style = \"border-style:solid;\" >  ";
-  echo "Order Number: ".$id;
-  if(isset($_POST["deleteOrders"])){
-    $result = $mysqli -> query("DELETE FROM orders WHERE id ='$id'");
-    header("Location: dashboard.php");
-    $_SESSION["message"] = "Orders Successfully Deleted";
-  }
-  else{
-      $result = $mysqli -> query("SELECT amount, partnumber,rev,due_date,comments,status FROM orders WHERE id ='$id'");
-  }
-
-  if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()){
-
-      echo "<p>Amount:</p><input style = \" margin-bottom:5px\" type = \"text\" name = \"amount".$acount."\" value=\"".$row["amount"]." \"> ";
-      echo "<p>Part Number: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"partnumber".$acount."\" value=\"".$row["partnumber"]." \"> ";
-      echo "<p>Rev: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"rev".$acount."\" value=\"".$row["rev"]." \"> ";
-      //$date = $row["due_date"];
-    //  $date = strval($date);
-      //echo $date;
-      echo "<p> Date Due: </p><input style = \" margin-bottom:5px\" type =\"date\" name = \"due_date".$acount."\" value =\"".$row["due_date"]."\">";
-  //    echo "<input type = \"date\" name = \"due_date".$acount." \" value=\" 2000-10-10 \"> ";
-      echo "<p>Comments: </p><input style = \" margin-bottom:5px\" type = \"text\" name = \"comments".$acount."\" value=\"".$row["comments"]." \"> ";
-      echo "<p> Status</p><input type = \"radio\" id = \"0".$id."\" name = \"status".$acount."\" value=\"0\" ";
-      if($row["status"] == 0){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"0".$id."\">Received</label>";
-      echo "<input type = \"radio\" id = \"1".$id."\" name = \"status".$acount."\" value=\"1\" ";
-      if($row["status"] == 1){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"1".$id."\">Set up</label>";
-      echo "<input type = \"radio\" id = \"2".$id."\" name = \"status".$acount."\" value=\"2\" ";
-      if($row["status"] == 2){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"2".$id."\">Manufacturing</label>";
-      echo "<input type = \"radio\" id = \"3".$id."\" name = \"status".$acount."\" value=\"3\"";
-      if($row["status"] == 3){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"3".$id."\">Debur</label>";
-      echo "<input type = \"radio\" id = \"4".$id."\" name = \"status".$acount."\" value=\"4\"";
-      if($row["status"] == 4){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"4".$id."\">Packeaing</label>";
-      echo "<input type = \"radio\" id = \"5".$id."\" name = \"status".$acount."\" value=\"5\"";
-      if($row["status"] == 5){
-        echo "checked >";
-      }
-      else{
-      echo ">";
-      }
-      echo "<label for =\"5".$id."\">Shipped</label>";
-      echo "<br>";
-    }
-
-  }
-  //
-echo "</div>";
-$acount++;
-}
-
-//echo $i;
-
-}
-$_SESSION["numOrders"] = $acount;
-echo "<button type = \"submit\"> Submit Changes </button>";
-
-
-echo "</form>"?>
+Add New Employee
+</h1>
 <div class="margin_collapsetop"></div>
-<div class="ttr_vieworders_html_row0 row" >
-<div class="post_column col-xl-3 col-lg-3 col-md-6 col-sm-12 col-xs-12 col-12">
-<div class="ttr_vieworders_html_column00">
+<div class="ttr_createuser_html_row0 row" >
+<div class="post_column col-xl-12 col-lg-12 col-md-3 col-sm-3 col-xs-3 col-3">
+<div class="ttr_createuser_html_column00">
 <div class="margin_collapsetop"></div>
-<div class="html_content"><br /></div>
+<div class="html_content">
+  <h1> Plear enter Information for new Employees Account </h1>
+    <form action = "createuser.php" method ="post" style="float:left;width:25%;" >
+      <input type = "text" name = "username" placeholder="Enter Username" style="margin-bottom:5px;with:20%;">
+      <input type = "password" name="password" placeholder="Enter Passworld" style="margin-bottom:5px;">
+      <input type = "password" name="passwordcheck" placeholder="Enter Passworld Again" style="margin-bottom:5px;">
+      <p> Please Enter Employees Rank </p>
+      <input type="radio" name="auth" value = "1" id="rank1" checked>
+      <label for="rank1">Standard Employee</label>
+      <input type="radio" name="auth" value = "3" id="rank2">
+      <label for="rank2" >Manager</label>
+      <br>
+      <button type="submit"> Add Employee</button>
+        </form>
+        <?php echo "<p style = \"color:red\">".$message."</p>";
+        $message ="";?>
+
+</div>
 <div class="margin_collapsetop"></div>
 <div style="clear:both;width:0px;"></div>
 </div>
 </div>
-<div class=" visible-sm-block d-sm-block visible-xs-block d-block" style="clear: both;width:0px;"></div>
+<div class=" visible-lg-block d-xl-block d-lg-block" style="clear: both;width:0px;"></div>
 </div>
 <div class="margin_collapsetop"></div>
 </div><!--content_margin-->

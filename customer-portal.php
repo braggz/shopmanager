@@ -250,12 +250,7 @@ Customer Portal
 <div class="ttr_footer_element_alignment container">
 </div>
 <div id="ttr_footer_designed_by_links">
-<a href="http://templatetoaster.com" target="_self" >
-Website
-</a>
-<span id="ttr_footer_designed_by">
-Designed With TemplateToaster
-</span>
+
 </div>
 </div>
 </div>
